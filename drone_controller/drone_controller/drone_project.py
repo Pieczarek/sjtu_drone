@@ -6,7 +6,7 @@ from geometry_msgs.msg import Twist, Pose
 class DroneController(Node):
     def __init__(self):
         super().__init__('drone_controller')
-        self.x = 3.0
+        self.x = 5.0
         self.y = 1.0
         # Current pose subscriber
         self.gt_pose_sub = self.create_subscription(
@@ -43,13 +43,13 @@ class DroneController(Node):
             ypos = self.gt_pose.position.y
         print(xpos)
         print(self.x)
-        if xpos > 2.9 and xpos < 3.1:
+        if xpos > 4.9 and xpos < 5.1:
             self.x = 1.0
         if xpos > 0.9  and xpos < 1.1:
             self.y = 5.0
         if ypos > 4.9 and ypos < 5.1:
-            self.x = 3.0
-        if xpos > 2.9 and xpos < 3.1:
+            self.x = 5.0
+        if xpos > 4.9 and xpos < 5.1:
             self.y = 1.0
         msg.linear.x = self.x
         msg.linear.y = self.y
