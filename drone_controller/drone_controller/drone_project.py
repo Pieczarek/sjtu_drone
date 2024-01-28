@@ -3,18 +3,17 @@ from rclpy.node import Node
 
 from geometry_msgs.msg import Twist, Pose
 
-
 class DroneController(Node):
     def __init__(self):
         super().__init__('drone_controller')
-        
+        self.x = 3.0
+        self.y = 1.0
         # Current pose subscriber
         self.gt_pose_sub = self.create_subscription(
             Pose,
             '/drone/gt_pose',
             self.pose_callback,
             1)
-
         self.gt_pose = None
 
         # Control command publisher
@@ -24,7 +23,7 @@ class DroneController(Node):
         timer_period = 0.1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        # Feel fre to fill with your code! Add some objects to represent a goal points to achieve
+        # Feel free to fill with your code! Add some objects to represent a goal points to achieve
 
     
     def pose_callback(self, data):
@@ -33,11 +32,29 @@ class DroneController(Node):
 
     
     def timer_callback(self):
-        # HINT: Check a current pose. Use it to check if a drone achieved a desired pose.
         print(f"Current pose: {self.gt_pose}")
-        
-        # HINT: Use a self.command_pub to publish a command
-        # Fill with your code!
+        msg = Twist()
+        msg.linear.z = 6.5
+        xpos = 0.0
+        ypos = 0.0
+        zang = 0.0
+        if self.gt_pose is not None:
+            xpos = self.gt_pose.position.x
+            ypos = self.gt_pose.position.y
+        print(xpos)
+        print(self.x)
+        if xpos > 2.9 and xpos < 3.1:
+            self.x = 1.0
+        if xpos > 0.9  and xpos < 1.1:
+            self.y = 5.0
+        if ypos > 4.9 and ypos < 5.1:
+            self.x = 3.0
+        if xpos > 2.9 and xpos < 3.1:
+            self.y = 1.0
+        msg.linear.x = self.x
+        msg.linear.y = self.y
+        print(msg.linear.x)
+        self.command_pub.publish(msg)
         print("Published!")
 
 
